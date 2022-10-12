@@ -1,0 +1,8 @@
+package dto;
+
+public class AndMemberDTO {
+	private String email , pw ;
+	
+	
+	
+}

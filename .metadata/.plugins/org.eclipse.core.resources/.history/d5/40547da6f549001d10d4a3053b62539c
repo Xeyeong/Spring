@@ -1,0 +1,18 @@
+package com.hanul.middle;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class AndMainController {
+
+	
+	@RequestMapping("/andLogin")
+	public String login() {
+		
+		
+		
+		return null;
+	}
+}

@@ -13,8 +13,8 @@
 
 <P>  The time on the server is ${serverTime}. </P>
 
+<div><a href='login'>로그인</a></div>
 <div><a href='member'>회원가입</a></div>
-
 <div><a href='first'>실습1</a></div>
 <div><a href='second'>실습2</a></div>
 <div><a href='third'>실습3</a></div>

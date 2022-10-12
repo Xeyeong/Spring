@@ -1,0 +1,159 @@
+package com.hanul.web;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import member.MemberVO;
+
+@Controller
+public class TestController {
+	
+	
+	@RequestMapping("/loginResult")
+	public void login(String id, String pw) {
+		if( id.equals("admin") && pw.equals("1234") ) {
+		//아이디 비번 이 일치하는 경우(admin, 1234)
+
+			
+		}else {
+		//아이디 비번 이 일치하지 않는 경우
+			
+		}
+		
+	}
+	
+	
+	@RequestMapping("/login")
+	public String login() {
+		//응답화면 연결
+		return "member/login";
+	}
+	
+		
+	@RequestMapping("/joinPath/{name}/{gender}/{email}/{tel}")
+	public String join(Model model, @PathVariable String name, @PathVariable("tel") String phone
+						, @PathVariable String gender
+						, @PathVariable String email) {
+		//화면에서 입력한 정보를 가져와 
+		
+		//화면에 출력할 수 있도록 Model 에 attribute 로 데이터를 담는다
+		model.addAttribute("name", name);
+		model.addAttribute("email", email);
+		model.addAttribute("gender", gender);
+		model.addAttribute("phone", phone);
+		model.addAttribute("usage", "@PathVariable");
+		
+		//응답화면 연결
+		return "member/info";
+	}
+	
+	@RequestMapping("/joinDataObject")
+	public String join( MemberVO vo, Model model ) {
+		//화면에서 입력한 정보를 가져와 
+		
+		//화면에 출력할 수 있도록 Model 에 attribute 로 데이터를 담는다
+		model.addAttribute("vo", vo);
+		model.addAttribute("usage", "데이터객체");
+		
+		//응답화면 연결
+		return "member/info";
+	}
+	
+	
+	@RequestMapping("/joinParam")
+	public String join( @RequestParam String name, String gender
+						, String email, @RequestParam("phone") String tel
+						, Model model) {
+		//화면에서 입력한 정보를 가져와 
+		
+		//화면에 출력할 수 있도록 Model 에 attribute 로 데이터를 담는다
+		model.addAttribute("name", name);
+		model.addAttribute("gender", gender);
+		model.addAttribute("email", email);
+		model.addAttribute("phone", tel);
+		model.addAttribute("usage", "@RequestParam");
+		
+		//응답화면 연결
+		return "member/info";
+	}
+	
+	
+	@RequestMapping("/joinRequest")
+	public String join( HttpServletRequest request, Model model ) {
+		//화면에서 입력한 정보를 가져와 
+		String name = request.getParameter("name");
+		String gender = request.getParameter("gender");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		
+		
+		//화면에 출력할 수 있도록 Model 에 attribute 로 데이터를 담는다
+		//화면에 출력할 수 있도록 Model 에 attribute 로 데이터를 담는다
+		model.addAttribute("usage", "HttpServletRequest");
+		model.addAttribute("name", name);
+		model.addAttribute("gender", gender);
+		model.addAttribute("email", email);
+		model.addAttribute("phone", phone);
+		
+		//응답화면 연결
+		return "member/info";
+	}
+	
+	
+	//회원가입화면 요청
+	@RequestMapping("/member")
+	public String member() {
+		return "member/join";
+	}
+	
+	
+	@RequestMapping("/third")
+	public ModelAndView view() {
+		//비지니스로직
+		//오늘 날짜 시각 정보를 view화면에 출력할 수 있도록 한다
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String now = sdf.format(new Date());
+		
+		ModelAndView model = new ModelAndView();
+		model.addObject("time", now);
+		model.setViewName("view");
+		return model;
+	}
+	
+	
+	@RequestMapping("/second")
+	public String second( Model model ) {
+		//비지니스로직
+		//현재 시각을 화면에 출력할 수 있도록 Model에 attribute로 담는다
+		SimpleDateFormat sdf = new SimpleDateFormat("a hh시 mm분 ss초");
+		String now = sdf.format( new Date() );
+		model.addAttribute("now", now);
+		
+		//응답화면 연결
+		return "view";
+	}
+	
+	
+	@RequestMapping("/first")
+	public String first(Model model) {
+		//비지니스로직
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+		String formattedToday = sdf.format(today);
+		//화면에서 출력할 데이터를 Model에 attribute로 담는다
+		model.addAttribute("today", formattedToday);
+		
+		//응답화면 연결
+		return "view";
+	}
+
+}

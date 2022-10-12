@@ -1,0 +1,11 @@
+package com.hanul.middle;
+
+public class AndController {
+	// hanul302 라는 맵핑이 주어지면
+	// ArrayList<String> <= 타입을 리턴하는 메소드를 만들기.
+	
+	// localhost/middle/hanul302 
+	
+	// [ { "aa" } , { "bb" } ... ]
+	
+}
