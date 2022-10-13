@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:include page='/WEB-INF/views/include/header.jsp'/>
 <h3>고객정보</h3>
 <table class='w-px600'>
 <tr><th class='w-px160'>고객명</th>
@@ -26,8 +25,8 @@
 <div class='btnSet'>
 	<a href='list.cu' class='btn-fill'>고객목록</a>
 	<a href='modify.cu?id=${vo.id}' class='btn-fill'>정보수정</a>
+	<a class='btn-fill' onclick="if( confirm('정말 삭제?') ) location='delete.cu?id=${vo.id}'">정보삭제</a>
 </div>
 
-<jsp:include page='/WEB-INF/views/include/footer.jsp'/>
 </body>
 </html>

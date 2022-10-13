@@ -8,7 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <h3>고객목록</h3>
 
 <table class='tb-list w-px600'>
@@ -17,7 +16,9 @@
 <tr><td><a href='detail.cu?id=${vo.id}'>${vo.name}</a></td><td>${vo.phone}</td></tr>
 </c:forEach>
 </table>
+<div class='btnSet'>
+<a class='btn-fill' href='new.cu'>신규고객</a>
+</div>
 
-<jsp:include page="/WEB-INF/views/include/footer.jsp"/>
 </body>
 </html>

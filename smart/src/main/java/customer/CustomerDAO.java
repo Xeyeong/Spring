@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomerDAO implements CustomerService{
-	@Autowired private SqlSession sql ;
+	@Autowired @Qualifier("hanul") private SqlSession sql ;
 	
 	@Override
-	public int customer_insert(CustomerVO vo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int customer_insert(CustomerVO vo) {		
+		return sql.insert("customer.insert", vo);
 	}
 
 	@Override
@@ -29,14 +29,12 @@ public class CustomerDAO implements CustomerService{
 
 	@Override
 	public void customer_update(CustomerVO vo) {
-		// TODO Auto-generated method stub
-		
+		sql.update("customer.update", vo);
 	}
 
 	@Override
 	public void customer_delete(String id) {
-		// TODO Auto-generated method stub
-		
+		sql.delete("customer.delete", id);
 	}
 
 }

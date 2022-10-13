@@ -18,6 +18,7 @@ table tr { height: 46px }
 table.tb-list tr { height: 38px }
 table th, table td { border:1px solid #b0b0b0; }
 table td { padding: 6px 10px }
+table th { background-color: #f6f6f6 }
 
 table a:hover { font-weight: bold; }
 
@@ -35,6 +36,22 @@ a.btn-empty {
 	background-color: #fff;
 	color: #3367d6;
 }
+
+input {
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid #b0b0b0;
+	font-size:16px;
+}
+input:focus { 
+	outline: none; border-color: #3367d6;
+}
+input[type=radio]{
+	width: 18px;
+	margin: 0 5px 2px;
+	vertical-align: middle;
+}
+label:not(:last-child) { margin-right: 20px }
 
 
 .w-px40 { width: 40px }
