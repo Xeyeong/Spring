@@ -43,7 +43,7 @@ input {
 	border: 1px solid #b0b0b0;
 	font-size:16px;
 }
-input:focus { 
+input:focus, select:focus { 
 	outline: none; border-color: #3367d6;
 }
 input[type=radio]{
@@ -52,6 +52,33 @@ input[type=radio]{
 	vertical-align: middle;
 }
 label:not(:last-child) { margin-right: 20px }
+
+.tb-wrap {  
+	margin: 0 auto;
+	overflow-y:auto ; 
+	height: 495px;  } 
+.tb-wrap table { width:100% }
+
+.ui-datepicker table tr { height: inherit; }
+
+select {
+	cursor: pointer;
+	height: 32px;
+	padding-left: 10px;
+	font-size: 16px;
+	border: 1px solid #b0b0b0;
+}
+
+#list-top {
+	display: flex;
+	margin: 0 auto;
+	justify-content:space-between;
+}
+
+ul { display: flex; }
+ul li:not(:first-child) { margin-left: 5px }
+
+
 
 
 .w-px40 { width: 40px }
