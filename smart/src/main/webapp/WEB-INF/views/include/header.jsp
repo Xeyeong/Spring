@@ -1,14 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix='c'%>    
-<link href='css/common.css?<%=new java.util.Date()%>' type='text/css' rel='stylesheet'> 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  
-<script src='https://code.jquery.com/jquery-3.6.1.min.js'></script>   
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src='js/common.js?<%=new java.util.Date()%>''></script>
    
-<!-- <script src='js/jquery.js'></script> -->
 <header>
 	<div class='category'>
 		<ul>
@@ -19,6 +12,19 @@
 			<li><a href='list.bo' class="${category eq 'bo' ? 'active' : ''}">방명록</a></li>
 			<li><a href='list.da' class="${category eq 'da' ? 'active' : ''}">공공데이터</a></li>
 			<li><a href='list.vi' class="${category eq 'vi' ? 'active' : ''}">데이터시각화</a></li>
+		</ul>
+	</div>
+	<div>
+		<ul>
+			<c:if test='${empty loginInfo}'>
+			<li><a class='btn-fill' href='login'>로그인</a></li>
+			<li><a class='btn-fill'>회원가입</a></li>
+			</c:if>
+			<c:if test='${not empty loginInfo}'>
+			<li><strong>${loginInfo.name}</strong> 님</li>
+			<li><a class='btn-fill' href="password">비밀번호변경</a></li>
+			<li><a class='btn-fill' href='logout'>로그아웃</a></li>
+			</c:if>
 		</ul>
 	</div>
 </header>

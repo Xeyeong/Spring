@@ -28,6 +28,9 @@
 <tr><th>업무제목</th>
 	<td>${vo.job_title }</td>
 </tr>
+<tr><th>매니저명</th>
+	<td>${vo.manager_name }</td>
+</tr>
 <tr><th>입사일자</th>
 	<td>${vo.hire_date }</td>
 </tr>

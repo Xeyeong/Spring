@@ -19,9 +19,28 @@ import hr.JobVO;
 public class HrController {
 	@Autowired private HrServiceImpl service;
 	
+	//신규사원등록처리 요청
+	@RequestMapping("/insert.hr")
+	public String insert(EmployeeVO vo) {
+		//화면에서 입력한 정보를 DB에 신규저장처리한 후
+		service.employee_insert(vo);
+		//응답화면 연결
+		return "redirect:list.hr";
+	}
+	
+	
 	//신규사원등록화면 요청
 	@RequestMapping("/new.hr")
-	public String hr() {
+	public String hr(Model model) {
+		//회사의 부서/업무/매니저 목록을 DB에서 조회해와
+		List<DepartmentVO> departments = service.hr_department_list();
+		List<JobVO> jobs = service.hr_job_list();
+		List<EmployeeVO> managers = service.hr_manager_list();
+		//신규등록화면에서 출력할 수 있도록 Model 에 attribute 로 담는다
+		model.addAttribute("jobs", jobs);
+		model.addAttribute("departments", departments);
+		model.addAttribute("managers", managers);
+		//응답화면연결
 		return "hr/new";
 	}
 	
@@ -48,9 +67,11 @@ public class HrController {
 	//사원정보 수정화면 요청
 	@RequestMapping("/modify.hr")
 	public String modify( int id, Model model ) {
-		//회사의 부서/업무 목록을 DB에서 조회..
+		//회사의 부서/업무/매니저 목록을 DB에서 조회..
 		List<DepartmentVO> departments = service.hr_department_list();
 		List<JobVO> jobs = service.hr_job_list();
+		List<EmployeeVO> managers = service.hr_manager_list();
+
 		
 		//사원정보를 DB에서 조회해와
 		EmployeeVO vo = service.employee_info(id);
@@ -58,6 +79,7 @@ public class HrController {
 		model.addAttribute("vo", vo);
 		model.addAttribute("departments", departments);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("managers", managers);
 		//응답화면연결
 		return "hr/modify";
 	}

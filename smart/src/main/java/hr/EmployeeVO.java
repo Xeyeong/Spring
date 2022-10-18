@@ -4,10 +4,16 @@ import java.sql.Date;
 
 public class EmployeeVO {
 	private int employee_id, salary, department_id, manager_id;
-	private String last_name, first_name, name, job_id, department_name, job_title, phone_number, email;
+	private String last_name, first_name, name, manager_name, job_id, department_name, job_title, phone_number, email;
 	private Date hire_date;
 	private double commission_pct;
 	
+	public String getManager_name() {
+		return manager_name;
+	}
+	public void setManager_name(String manager_name) {
+		this.manager_name = manager_name;
+	}
 	public int getEmployee_id() {
 		return employee_id;
 	}

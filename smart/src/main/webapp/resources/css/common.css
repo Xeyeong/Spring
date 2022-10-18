@@ -78,7 +78,11 @@ select {
 ul { display: flex; }
 ul li:not(:first-child) { margin-left: 5px }
 
-
+.center {
+	position: absolute;
+	left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+}
 
 
 .w-px40 { width: 40px }

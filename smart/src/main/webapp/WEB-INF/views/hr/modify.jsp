@@ -50,6 +50,17 @@ table td { text-align: left }
 		</select>
 	</td>
 </tr>
+<tr><th>매니저</th>
+	<td>
+		<select name='manager_id'>
+			<option value='-1'>매니저선택</option>
+			<c:forEach items='${managers}' var='m'>
+			<option ${m.employee_id eq vo.manager_id ? 'selected' : ''} 
+				value='${m.employee_id }'>${m.name}</option>
+			</c:forEach>
+		</select>
+	</td>
+</tr>
 <tr><th>입사일자</th>
 	<td><input type='text' class='date' name='hire_date' value='${vo.hire_date }'></td>
 </tr>
