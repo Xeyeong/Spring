@@ -47,7 +47,22 @@ public class HomeController {
 			}
 		}
 		// -----------------------------------------------------------------------------------------------
-		 * */
+		 *
+		
+		List<MemberVO> list = member.member_admin();
+		for(MemberVO vo : list) {
+			if (vo.getSalt() == null && vo.getPw() != null ) {
+				String salt = common.generateSalt();
+				String pw = common.getEncrypt(vo.getPw(), salt); 
+				vo.setSalt(salt);
+				vo.setPw(pw);
+				member.member_salt_pw(vo);
+			}
+		}
+		 */
+		
+		
+		
 		
 		return "home";
 	}

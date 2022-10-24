@@ -10,24 +10,77 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import common.CommonUtility;
 import member.MemberServiceImpl;
 import member.MemberVO;
 
+
 @Controller
 public class MemberController {
  	@Autowired private MemberServiceImpl service;
  	@Autowired private CommonUtility common;
-	private String NAVER_ID = "FUGviTJg_mmDsIrhZU4E";
-	private String NAVER_SECRET = "0fzLe2MxCY";
-	private String KAKAO_ID = "7c13a83e4cbae4cd9ece01140bed85d2";
-
+	private String NAVER_ID = "cmg3bBYHwudZL3cfrAWJ";
+	private String NAVER_SECRET = "CL4i_Uy02M";
+	private String KAKAO_ID = "e59e9d6b56e6d28fc73eab24e266b174";
 	
-	//https://kauth.kakao.com/oauth/authorize?response_type=code
-	//&client_id=${REST_API_KEY}
-	//&redirect_uri=${REDIRECT_URI}
-	//레스트API키 7c13a83e4cbae4cd9ece01140bed85d2
+	//회원가입처리 요청
+	@ResponseBody @RequestMapping(value="/join", produces="text/html; charset=utf-8")
+	public String join(MemberVO vo, MultipartFile file, HttpServletRequest request) {
+		//첨부파일이 있는 경우
+		if( ! file.isEmpty() ) {
+			//서버에 첨부파일을 저장한다: 파일업로드
+			vo.setProfile( common.fileUpload("profile", file, request) );
+		}
+		
+		//화면에서 입력한 정보를 DB에 신규저장한 후
+		//입력한 비밀번호를 암호화해서 저장
+		//1.암호화에 사용할 salt 생성
+		String salt = common.generateSalt();
+		//2.salt 를 사용해 입력한 비번을 암호화
+		String pw = common.getEncrypt(vo.getPw(), salt);
+		vo.setPw( pw ); //암호화된 비번을 담는다
+		vo.setSalt(salt);
+		
+		StringBuffer msg = new StringBuffer("<script>");
+		if( service.member_join(vo) == 1) {
+			//가입축한 안내문서를 첨부해 이메일로 전송하기
+			String filename = request.getSession().getServletContext()
+					.getRealPath("resources/files/회원가입시안내.pdf");
+			common.sendWelcome(vo, filename);
+			
+			//가입정상처리되면 로그인되게
+			request.getSession().setAttribute("loginInfo", vo);
+			
+			msg.append("alert('회원가입을 축하합니다^^'); location='")
+					 .append( request.getContextPath() ).append("'");			
+		}else {
+			msg.append("alert('회원가입에 실패했습니다ㅠㅠ'); history.go(-1);");
+		}
+		msg.append("</script>");
+		
+		//응답화면연결
+		return msg.toString();
+	}
+	
+	
+	//아이디 중복확인처리 요청
+	@ResponseBody @RequestMapping("/id_check")
+	public boolean id_check(String id) {
+		//아이디가 DB에 존재하는지 확인한 후: 1:사용불가(false), 0:사용가능(true)
+		//true/false 로 반환
+		return service.member_id_check(id)==1 ? false : true;
+	}
+	
+	//회원가입화면 요청
+	@RequestMapping("/member")
+	public String member(HttpSession session) {
+		session.setAttribute("category", "join");
+		//응답화면연결
+		return "member/join";
+	}
+	
 	
 	//카카오로그인처리 요청
 	@RequestMapping("/kakao_login")
@@ -234,6 +287,7 @@ public class MemberController {
 	//비밀번호 변경화면 요청
 	@RequestMapping("/password")
 	public String password(HttpSession session) {
+		session.setAttribute("category", "password");
 		// 로그인 된 경우 비밀번호 변경화면으로 연결
 		// 로그인 안된 경우 로그인 화면으로 연결		
 		MemberVO vo = (MemberVO)session.getAttribute("loginInfo");
@@ -244,6 +298,27 @@ public class MemberController {
 			
 		return "member/password";
 	}
+	
+	
+	//비밀번호 변경처리 요청
+	@RequestMapping("/change")
+	public String change(HttpSession session, String pw) {
+		// 로그인 사용자의 salt를 사용해서 새로 입력한 비밀번호를 암호화한다
+		MemberVO vo = (MemberVO)session.getAttribute("loginInfo");
+		if(vo == null ) return "redirect:login";
+		pw = common.getEncrypt(pw, vo.getSalt());	//암호화된 새 비밀번호
+		vo.setPw(pw);
+		
+		// 화면에서 입력한 비밀번호를 DB에 변경 저장한 후
+		service.member_salt_pw(vo);
+		//세션의 로그인정보를 변경된 정보로 바꿔 담는다.
+		session.setAttribute("loginInfo", vo);
+		
+		
+		// 응답화면 연결
+		return "redirect:/";
+	}
+	
 	//비밀번호재발급 (임시비번) 요청
 	@ResponseBody @RequestMapping(value="/reset"
 									,produces="text/html; charset=utf-8")
@@ -277,7 +352,8 @@ public class MemberController {
 	
 	//비밀번호찾기화면 요청
 	@RequestMapping("/find")
-	public String find() {
+	public String find(HttpSession session) {
+		session.setAttribute("category", "find");
 		//응답화면 연결
 		return "default/member/find";
 	}

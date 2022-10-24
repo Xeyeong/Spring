@@ -8,6 +8,6 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<import resource="classpath:dbconn/common.xml" />
 	
-	<context:component-scan base-package="customer, member, hr, common" />
+	<context:component-scan base-package="customer, member, notice, hr, common" />
 		
 </beans>

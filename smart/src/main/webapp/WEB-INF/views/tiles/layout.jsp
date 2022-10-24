@@ -5,6 +5,8 @@
     
 
 <c:choose>
+	<c:when test="${category eq 'join'}"><c:set var='title' value='회원가입'/></c:when>
+	<c:when test="${category eq 'password'}"><c:set var='title' value='비밀번호변경'/></c:when>
 	<c:when test="${category eq 'cu'}"><c:set var='title' value='고객관리'/></c:when>
 	<c:when test="${category eq 'hr'}"><c:set var='title' value='사원관리'/></c:when>
 	<c:when test="${category eq 'no'}"><c:set var='title' value='공지사항'/></c:when>
@@ -25,8 +27,8 @@
   
 <script src='https://code.jquery.com/jquery-3.6.1.min.js'></script>   
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js'></script>
 <script src='js/common.js?<%=new java.util.Date()%>'></script>
-
 </head>
 <body>
 <tiles:insertAttribute name='header'/>

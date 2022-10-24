@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix='c'%>
 <c:choose>
 	<c:when test="${category eq 'login'}"><c:set var='title' value='로그인'/></c:when>
+	<c:when test="${category eq 'find'}"><c:set var='title' value='비밀번호찾기'/></c:when>
+	<c:when test="${category eq 'password'}"><c:set var='title' value='비밀번호변경'/></c:when>
 </c:choose>
 
 <!DOCTYPE html>

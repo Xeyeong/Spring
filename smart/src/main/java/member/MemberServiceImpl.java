@@ -58,4 +58,9 @@ public class MemberServiceImpl implements MemberService {
 		return dao.member_salt(id);
 	}
 
+	@Override
+	public List<MemberVO> member_admin() {
+		return dao.member_admin();
+	}
+
 }
