@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 방명록 첨부파일 저장처리 -->
+	<insert id='file_insert'>
+		<!-- 첨부파일이 여러개이므로 반복문처리 -->
+		<foreach collection="fileList" item='file' open="insert all"
+			separator=" " close="select * from dual">
+			into board_file ( filename, filepath, board_id )
+			values ( #{file.filename}, #{file.filepath}, #{id} )
+		</foreach>
+	</insert>
+
+	<!-- 방명록 신규 글저장처리 -->
+	<insert id='insert'>
+		insert into board ( title, content, writer )
+		values ( #{title},
+		#{content}, #{writer} )
+
+		<!-- 저장후 board 의 pk인 id의 시퀀스를 반환해준다 -->
+		<selectKey keyProperty="id" resultType="integer"
+			order='AFTER'>
+			select seq_board.currval from dual
+		</selectKey>
+
+	</insert>
+
+
+	<!-- 방명록 글 목록 10건 조회 -->
+	<select id='list' resultType='board.BoardVO'>
+
+		select *
+		from (select row_number() over(order by b.id) no, name, b.*
+		,
+		(select count(*) from board_file f where b.id=f.board_id) filecnt
+		from
+		board b left outer join member m on b.writer = m.id) b
+		where no between
+		#{beginList} and #{endList}
+		order by no desc
+
+	
+		<!-- select row_number() over(order by b.id) no, name, b.* -->
+		<!-- , (select count(*) from board_file f where b.id=f.board_id) filecnt -->
+		<!-- from board b inner join member m on b.writer = m.id -->
+		<!-- order by no desc -->
+	</select>
+
+	<sql id='search_where'>
+		<choose>
+			<when test="search=='s1'"><!-- 전체 -->
+				where title like '%' || #{keyword} || '%'
+				or content like '%' || #{keyword} || '%'
+				or writer in (select id from member where name like '%' || #{keyword}
+				|| '%' || '%')
+
+
+			</when>
+			<when test="search=='s2'"><!-- 제목 -->
+				where title like '%' || #{keyword} || '%'
+			</when>
+			<when test="search=='s3'"><!-- 내용 -->
+				or content like '%' || #{keyword} || '%'
+			</when>
+			<when test="search=='s4'"><!-- 작성자 -->
+				or writer in (select id from member where name like '%' ||
+				#{keyword} || '%' || '%')
+			</when>
+			<when test="search=='s5'"><!-- 제목+내용 -->
+				where title like '%' || #{keyword} || '%'
+				or content like '%' || #{keyword} || '%'
+			</when>
+		</choose>
+	</sql>
+	
+	<!-- 방명록 글 총 건수 조회 -->
+	<select id='total' resultType='integer'>
+		select count(id) from board <include refid="search_where"/>
+
+
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

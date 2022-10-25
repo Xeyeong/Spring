@@ -205,8 +205,8 @@ public class NoticeController {
 	@RequestMapping("/list.no")
 	public String list(Model model, NoticePageVO page, HttpSession session) {
 		//임시로 로그인처리를 한다 -----
-		String id = "admin97";
-		String pw = "manager";		
+		String id = "admin02";
+		String pw = "admin02";		
 		String salt = member.member_salt(id);
 		pw = common.getEncrypt(pw, salt);		
 		MemberVO vo = member.member_login(id, pw);

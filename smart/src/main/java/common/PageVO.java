@@ -16,10 +16,16 @@ public class PageVO {
 	private int endPage;		//각 블럭의 끝 페이지번호
 	private int beginPage;		//각 블럭의 시작 페이지 번호
 	
-	private String search, keyword;
+	private String search, keyword, viewType="list";	//검색조건/검색어/보기형태
 	
 	
 
+	public String getViewType() {
+		return viewType;
+	}
+	public void setViewType(String viewType) {
+		this.viewType = viewType;
+	}
 	public String getSearch() {
 		return search;
 	}
