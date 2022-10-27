@@ -9,7 +9,7 @@
 <body>
 <h3>방명록 글쓰기</h3>
 
-<form method='post' action='insert.bo' enctype="multipart/form-data">
+<form method='post' action='insert.bo' enctype='multipart/form-data'>
 <table class='w-px1200'>
 <tr><th class='w-px140'>제목</th>
 	<td><input type='text' name='title' class='full chk' title='제목'></td>

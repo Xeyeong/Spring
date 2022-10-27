@@ -29,6 +29,18 @@ import member.MemberVO;
 @Service
 public class CommonUtility {
 	
+	//첨부되어진 물리적파일 삭제
+	public void attachedFile_delete(String filepath, HttpServletRequest request) {
+		if( filepath != null ) {
+			//DB: http://localhost/smart/upload/notice/2022/10/21/80984d3_kakao_login.zip
+			//실제: D:\\app\\smart\\upload\\notice\\2022\\10\\21\\abc.txt
+			filepath = filepath.replace(appURL(request)
+										, "d://app/" + request.getContextPath() );
+			File file = new File( filepath );
+			if( file.exists() ) file.delete();
+
+		}
+	}
 	//파일다운로드
 	public boolean fileDownload(String filename, String filepath
 							, HttpServletRequest request

@@ -42,6 +42,7 @@
 </ul>
 </div>
 <input type='hidden' name='curPage' value='1'>
+<input type='hidden' name='id'>
 </form>
 
 <c:if test='${page.viewType eq "grid"}'>
@@ -91,7 +92,10 @@
 
 <script>
 function info(id){
-	
+	$('[name=id]').val( id );
+	$('[name=curPage]').val( ${page.curPage} );
+	$('form').attr('action', 'info.bo');
+	$('form').submit();
 }
 
 $('[name=pageList]').val( ${page.pageList} ).prop('selected', true);
