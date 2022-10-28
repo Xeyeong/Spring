@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletOutputStream;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.HtmlEmail;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -225,6 +227,21 @@ public class CommonUtility {
 		}
 		return salt.toString();
 	}
+	
+	public Map<String, Object> requestAPItoMap(StringBuffer apiURL) {
+		JSONObject json = new JSONObject( requestAPI(apiURL));
+		json = json.getJSONObject("response");	//header, body
+		json = json.getJSONObject("body");	//items, numOfRows, pageNo, totalCount
+		int count = 0;
+		if(json.has("totalCount")) count = json.getInt("totalCount");
+		json = json.getJSONObject("items"); //item 이 10개
+		json.put("count", count);
+		return json.toMap();
+	}
+	
+	
+	
+	
 	
 	
 	

@@ -29,6 +29,7 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js'></script>
 <script src='js/common.js?<%=new java.util.Date()%>'></script>
+
 </head>
 <body>
 <tiles:insertAttribute name='header'/>

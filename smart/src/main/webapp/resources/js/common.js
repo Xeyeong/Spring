@@ -110,12 +110,13 @@ function removedFile( $div ){
 		removed = removed.indexOf(',')==-1 ? [removed] : removed.split(',');
 		
 	if( $div.data('file') ) removed.push( String($div.data('file')) ); //배열에 문자로 추가
-	removed = Array.from( 	//console.log('file>',new Set( removed ) );//집합데이터를 배열데이터로 만든다
- removed );
+	removed = Array.from( new Set( removed ) );//집합데이터를 배열데이터로 만든다
+	//console.log('file>', removed );
 	
 	$('[name=removed]').val( removed ); 
 	//console.log('최종>', $('[name=removed]').val() );
 }
+	
 	
 
 //첨부파일관련태그 복제함수
@@ -156,7 +157,22 @@ function emptyCheck(){
 	return ok;
 }
 
-
+//팝업효과 태그 항상 가운데 위치할 수 있게
+function center( tag, back ){
+	var width 
+	= Math.max( $(window).width(), $('body').prop('scrollWidth') );
+	var height 
+	= Math.max( $(window).height(), $('body').prop('scrollHeight') );
+	back.css( {'width': width, 'height': height } );
+	
+	var left 
+	= ($(window).width() - tag.width())/2 + $(window).scrollLeft();
+	var top 
+	= ($(window).height() - tag.height())/2 + $(window).scrollTop();
+	tag.removeClass('center').css( 
+				{'left': left, 'top': top, 'position':'absolute'} );
+	
+}
 
 
 
