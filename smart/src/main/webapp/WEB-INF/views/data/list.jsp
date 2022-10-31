@@ -10,7 +10,7 @@
 table.pharmacy td:nth-child(3) { text-align: left; }
 #popup { width: 800px; height: 600px; }
 .marker { font-weight: bold;  font-size: 16px; color: #ff0000; }
-.list-view, .grid-view { border: 1px solid #b0b0b0; padding: 3px 6px }
+.list-view, .grid-view { border: 1px solid #b0b0b0; padding: 4px 6px }
 .common a.on { color:#3367d6; }
 .common a.off { color:#b0b0b0; }
 
@@ -18,6 +18,22 @@ ul.pharmacy li div:first-child {  height: 40px }
 ul.pharmacy li div:last-child {  font-size: 14px }
 
 table.animal img { width: 100%;   height:100px; }
+
+ul.animal li { display: flex; flex-direction: column; }
+ul.animal img { width: 80px; height: 100px; }
+ul.animal .care { font-size: 14px;  height: 35px; 
+	display: flex; justify-content: space-between;
+}
+ul.animal .info { display: flex  !important; justify-content: space-between;
+	height: calc(100% - 35px) !important;
+}
+ul.animal .info div { display: flex; flex-direction: column; 
+	padding: 0 !important;  width: 120px;
+}
+ul.animal .info span { white-space: nowrap; 
+	overflow: hidden; text-overflow: ellipsis;}
+ul.animal .info .sw {  display: flex; justify-content: space-between;}
+
 
 </style>
 </head>
@@ -47,6 +63,7 @@ table.animal img { width: 100%;   height:100px; }
 </div>
 <div id='popup-background'></div>
 <div id='popup' class='center'></div>
+<div class='loading center'><img src='img/loading.gif'></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=98e6eb0cfc6721630538f993ae458df9"></script>
 
@@ -75,7 +92,11 @@ $('.api a').click(function(){
 
 //약국정보 요청
 function pharmacy_list( page ){
+	$('.animal-top').empty();
+	$('.page-list').empty();
+	$('#data-list').empty();
 	
+	loading(true);
 	$.ajax({
 		url: 'data/pharmacy',
 		data: { pageNo: page, rows: pageList },
@@ -86,8 +107,9 @@ function pharmacy_list( page ){
 			else 					pharmacy_grid_view( $(response.item), true ); 
 					
 			makePage( response.count, page );
-			
+			loading(false);
 		},error: function(req, text){
+			loading(false);
 			alert(text+':'+req.status);
 		}
 	});

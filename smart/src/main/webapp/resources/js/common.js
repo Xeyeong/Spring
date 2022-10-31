@@ -174,6 +174,9 @@ function center( tag, back ){
 	
 }
 
+function loading( is ){
+	$('.loading').css('display', is ? 'block' : 'none');
+}
 
 
 
