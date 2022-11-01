@@ -59,7 +59,7 @@ public class NoticeController {
 		NoticeVO vo = service.notice_info(id);
 		if( service.notice_delete(id)==1 ) {
 			//첨부파일이 있었던 경우 해당 물리적파일 삭제
-			attachedFile_delete(vo.getFilepath(), request);
+			common.attachedFile_delete(vo.getFilepath(), request);
 		}
 		//응답화면연결
 		return "redirect:list.no?curPage=" + page.getCurPage()
@@ -104,7 +104,7 @@ public class NoticeController {
 			//첨부파일이 없는 경우
 			if( filename.isEmpty() ) {
 				//파일명이 없는 경우는 삭제한 경우
-				attachedFile_delete(notice.getFilepath(), request);
+				common.attachedFile_delete(notice.getFilepath(), request);
 				
 			}else {
 				//파일명이 있는 경우
@@ -119,7 +119,7 @@ public class NoticeController {
 			vo.setFilepath( common.fileUpload("notice", file, request) );	
 			
 			//원래 첨부파일이 있었다면 물리적파일을 삭제
-			attachedFile_delete( notice.getFilepath(), request );
+			common.attachedFile_delete( notice.getFilepath(), request );
 		}
 		
 		
@@ -133,18 +133,7 @@ public class NoticeController {
 						;
 	}
 	
-	private void attachedFile_delete(String filepath, HttpServletRequest request) {
-		if( filepath != null ) {
-			//DB: http://localhost/smart/upload/notice/2022/10/21/80984d3_kakao_login.zip
-			//실제: D:\\app\\smart\\upload\\notice\\2022\\10\\21\\abc.txt
-			filepath = filepath.replace( common.appURL(request)
-										, "d://app/" + request.getContextPath() );
-			File file = new File( filepath );
-			if( file.exists() ) file.delete();
 
-		}
-	}
-	
 	
 	//공지글수정화면 요청
 	@RequestMapping("/modify.no")
@@ -205,8 +194,8 @@ public class NoticeController {
 	@RequestMapping("/list.no")
 	public String list(Model model, NoticePageVO page, HttpSession session) {
 		//임시로 로그인처리를 한다 -----
-		String id = "admin02";
-		String pw = "admin02";		
+		String id = "admin97";
+		String pw = "manager";		
 		String salt = member.member_salt(id);
 		pw = common.getEncrypt(pw, salt);		
 		MemberVO vo = member.member_login(id, pw);

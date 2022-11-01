@@ -4,7 +4,6 @@ public class MemberVO {
 	private String id, pw, name, gender, email, birth, address, post
 					, admin, profile, social, phone, salt;
 	
-
 	public String getSalt() {
 		return salt;
 	}

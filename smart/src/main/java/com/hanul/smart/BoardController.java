@@ -30,11 +30,12 @@ public class BoardController {
 	@Autowired private BoardServiceImpl service;
 	
 	//방명록 댓글삭제처리 요청
-	@RequestMapping("/board/comment/delete/{id}")
+	@ResponseBody @RequestMapping("/board/comment/delete/{id}")
 	public void comment_delete(@PathVariable int id) {
 		//해당 댓글을 DB에서 삭제
 		service.board_comment_delete(id);
 	}
+	
 	
 	//방명록 댓글변경저장처리 요청
 	@ResponseBody @RequestMapping(value="/board/comment/update"

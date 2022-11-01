@@ -46,7 +46,6 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public NoticePageVO notice_list(NoticePageVO page) {
-		// TODO Auto-generated method stub
 		return dao.notice_list(page);
 	}
 

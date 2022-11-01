@@ -21,15 +21,15 @@ ${state.first ? '<hr>' : ''}
 <script>
 $('.btn-delete-cancel').click(function(){
 	$div = $(this).closest('div');
-	if($(this).text()=='취소'){
-	modifyStatus(false, $div);		
+	if( $(this).text()=='취소' ){
+		modifyStatus(false, $div);
 	}else{
 		//DB에서 댓글삭제
-		if(confirm('렬루 삭제?')){
+		if( confirm('정말 삭제?') ){
 			$.ajax({
-				url : 'board/comment/delete/' + $div.date('id'),
-				success: function() {
-					comment_list();
+				url: 'board/comment/delete/' + $div.data('id'),
+				success: function(){
+					comment_list();					
 				}
 			});
 		}
@@ -42,7 +42,7 @@ $('.btn-modify-save').click(function(){
 		//댓글영역과 같은 높이로 textarea의 높이를 지정
 		$div.children('.modify').css( 'height', $div.children('.view').height()-2 );
 		
-		$div.children('.modify').val( $div.children('.view').html().replace(/<br>/g, '\n'));
+		$div.children('.modify').val( $div.children('.view').html().replace(/<br>/g, '\n') );
 		
 		modifyStatus(true, $div);
 	}else{

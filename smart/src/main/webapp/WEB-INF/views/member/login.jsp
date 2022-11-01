@@ -24,7 +24,7 @@
 		<li><input type='button' id='kakao' onclick='location="kakao_login"'></li>
 	</ul>
 	</div>
-	<div><a href="find">비밀번호찾기</a></div>
+	<div><a href='find'>비밀번호 찾기</a></div>
 </div>
 <script>
 $('#pw').keyup(function(e){

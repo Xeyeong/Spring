@@ -21,28 +21,26 @@
 			<li><a class='btn-fill' href='member'>회원가입</a></li>
 			</c:if>
 			<c:if test='${not empty loginInfo}'>
+
 			<c:choose>
-				<c:when test="${empty loginInfo.profile }">
-					<li><i class="font-profile fa-brands fa-github"></i></li>
-				</c:when>
-				<c:otherwise>
-					<li><img class="profile" src="${loginInfo.profile}"/></li>
-				</c:otherwise>
+			<c:when test="${empty loginInfo.profile}">
+				<li><i class="font-profile fa-regular fa-circle-user"></i></li>
+			</c:when>
+			<c:otherwise>
+				<li><img class='profile' src='${loginInfo.profile}' ></li>
+			</c:otherwise>
 			</c:choose>
+
 			<li><strong>${loginInfo.name}</strong> 님</li>
-			<li><a class='btn-fill' href="password">비밀번호변경</a></li>
+			<li><a class='btn-empty' href='password'>비밀번호변경</a></li>
 			<li><a class='btn-fill' href='logout'>로그아웃</a></li>
 			</c:if>
 		</ul>
 	</div>
 </header>
 <style>
-.profile{
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
-	border : 1px solid #ababab;
-}
+.profile { width:50px; height:50px; border-radius: 50%; border:1px solid #aaa;}
+
 header {
 	align-items: center;
 	padding: 0 100px;
