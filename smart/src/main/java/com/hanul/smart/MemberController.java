@@ -16,6 +16,7 @@ import common.CommonUtility;
 import member.MemberServiceImpl;
 import member.MemberVO;
 
+
 @Controller
 public class MemberController {
  	@Autowired private MemberServiceImpl service;
@@ -72,7 +73,6 @@ public class MemberController {
 		return service.member_id_check(id)==1 ? false : true;
 	}
 	
-	
 	//회원가입화면 요청
 	@RequestMapping("/member")
 	public String member(HttpSession session) {
@@ -82,38 +82,36 @@ public class MemberController {
 	}
 	
 	
-	
 	//카카오로그인처리 요청
 	@RequestMapping("/kakao_login")
 	public String kakao_login(HttpServletRequest request) {
-		//https://kauth.kakao.com/oauth/authorize?response_type=code
-		//&client_id=${REST_API_KEY}
-		//&redirect_uri=${REDIRECT_URI}
 		StringBuffer url =
-			new StringBuffer("https://kauth.kakao.com/oauth/authorize?response_type=code");
+		new StringBuffer("https://kauth.kakao.com/oauth/authorize?response_type=code");
 		url.append("&client_id=").append(KAKAO_ID);
-		url.append("&redirect_uri=").append( appName(request) ).append("/kakaocallback");
-		
+		url.append("&redirect_uri=").append(appName(request)).append("/kakaocallback");
 		return "redirect:"+url.toString();
 	}
 	
 	@RequestMapping("/kakaocallback")
 	public String kakao_callback(String code, HttpSession session) {
-		if( code==null ) return "redirect:/";
+		if( code == null ) return "redirect:/"; 
 		
-		//토큰 받기까지 마쳐야 카카오 로그인을 정상적으로 완료
+		//토큰 받기까지 마쳐야 카카오 로그인을 완료할 수 있음
 //		curl -v -X POST "https://kauth.kakao.com/oauth/token" \
+//		 -H "Content-Type: application/x-www-form-urlencoded" \
 //		 -d "grant_type=authorization_code" \
 //		 -d "client_id=${REST_API_KEY}" \
+//		 --data-urlencode "redirect_uri=${REDIRECT_URI}" \
 //		 -d "code=${AUTHORIZE_CODE}"
-		StringBuffer url = 
-			new StringBuffer("https://kauth.kakao.com/oauth/token?grant_type=authorization_code");
-		url.append("&client_id=").append( KAKAO_ID );
+		StringBuffer url =
+		new StringBuffer("https://kauth.kakao.com/oauth/token?grant_type=authorization_code");
+		url.append("&client_id=").append(KAKAO_ID);
 		url.append("&code=").append(code);
 		String response = common.requestAPI(url);
-		JSONObject json = new JSONObject( response );
+		JSONObject json = new JSONObject(response);
 		String type = json.getString("token_type");
 		String token = json.getString("access_token");
+		
 		
 		url = new StringBuffer("https://kapi.kakao.com/v2/user/me");
 		response = common.requestAPI(url, type+" "+token);
@@ -126,14 +124,14 @@ public class MemberController {
 			vo.setId( String.valueOf( json.getLong("id") ) );
 			
 			json = json.getJSONObject("kakao_account");
-			vo.setName( hasKey(json, "name", "무명씨") );	
-			vo.setEmail( hasKey(json, "email") );	
-			vo.setGender( hasKey(json, "gender", "male") );	//female/male
+			vo.setName( hasKey(json, "name", true, "무명가수강윤") );	
+			vo.setEmail( hasKey(json, "email", false, null) );	
+			vo.setGender( hasKey(json, "gender", true, "male") );	//female/male
 			vo.setGender( vo.getGender().equals("male") ? "남" : "여");
-			vo.setPhone( hasKey(json, "phone_number") );
+			vo.setPhone( hasKey(json, "phone_number", false, null) );
 			
 			json = json.getJSONObject("profile");
-			vo.setProfile( hasKey(json, "profile_image_url") );
+			vo.setProfile( hasKey(json, "profile_image_url", false, null) );
 			
 			//카카오 로그인이 정상처리되었다면 세션에 로그인정보를 담는다
 			session.setAttribute("loginInfo", vo);
@@ -148,16 +146,6 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	private String hasKey(JSONObject json, String key) {
-		return json.has(key) ? json.getString(key) : "";
-	}
-	
-	private String hasKey(JSONObject json, String key, String val) {
-		key = json.has(key) ? json.getString(key) : "";
-		if( key.isEmpty() ) key = val;
-		return key;
-	}
-	
 	private String hasKey(JSONObject json, String key, boolean empty, String val) {
 		key = json.has(key) ? json.getString(key) : "";
 		if( key.isEmpty() && empty ) {
@@ -165,27 +153,28 @@ public class MemberController {
 		}
 		return key;
 	}
+	
  	
- 	//네이버로그인처리 요청
- 	@RequestMapping("/naver_login")
- 	public String naver_login(HttpSession session, HttpServletRequest request) {
-		
- 		//https://nid.naver.com/oauth2.0/authorize?response_type=code
- 		//&client_id=CLIENT_ID
- 		//&state=STATE_STRING
- 		//&redirect_uri=CALLBACK_URL
- 		
- 		String state = UUID.randomUUID().toString(); //상태토큰으로 사용할 데이터
- 		session.setAttribute("state", state);
- 		
- 		StringBuffer url =
- 		new StringBuffer("https://nid.naver.com/oauth2.0/authorize?response_type=code");
- 		url.append("&client_id=").append( NAVER_ID );
- 		url.append("&state=").append(state);
- 		url.append("&redirect_uri=").append( appName(request) ).append("/navercallback");
- 		
- 		return "redirect:" + url.toString();
- 	}
+	//네이버로그인처리 요청
+	 	@RequestMapping("/naver_login")
+	 	public String naver_login(HttpSession session, HttpServletRequest request) {
+			
+	 		//https://nid.naver.com/oauth2.0/authorize?response_type=code
+	 		//&client_id=CLIENT_ID
+	 		//&state=STATE_STRING
+	 		//&redirect_uri=CALLBACK_URL
+	 		
+	 		String state = UUID.randomUUID().toString(); //상태토큰으로 사용할 데이터
+	 		session.setAttribute("state", state);
+	 		
+	 		StringBuffer url =
+	 		new StringBuffer("https://nid.naver.com/oauth2.0/authorize?response_type=code");
+	 		url.append("&client_id=").append( NAVER_ID );
+	 		url.append("&state=").append(state);
+	 		url.append("&redirect_uri=").append( appName(request) ).append("/navercallback");
+	 		
+	 		return "redirect:" + url.toString();
+	 	}
  	
  	//네이버콜백처리
  	@RequestMapping("/navercallback")
@@ -258,36 +247,35 @@ public class MemberController {
  	}
  	
  	
-	//로그아웃처리 요청
- 	@RequestMapping("/logout")
- 	public String logout(HttpSession session, HttpServletRequest request) {
- 		//카카오계정과 함께 로그아웃
- 		MemberVO login = (MemberVO)session.getAttribute("loginInfo");
- 		if( login == null ) return "redirect:/";
- 		String social = login.getSocial();
- 		
- 		//세션에 있는 로그인정보(회원정보)를 삭제한다
- 		session.removeAttribute("loginInfo");
- 		
- 		if( social != null && social.equals("K") ) {
- 			//"https://kauth.kakao.com/oauth/logout
- 			//?client_id=${YOUR_REST_API_KEY}
- 			//&logout_redirect_uri=${YOUR_LOGOUT_REDIRECT_URI}"
- 			StringBuffer url = 
- 				new StringBuffer("https://kauth.kakao.com/oauth/logout");
- 			url.append("?client_id=").append(KAKAO_ID);
- 			url.append("&logout_redirect_uri=").append( appName(request) );
- 			return "redirect:" + url.toString();
- 		}else
- 			return "redirect:/";
- 	}
- 	
+ 	//로그아웃처리 요청
+ 	 	@RequestMapping("/logout")
+ 	 	public String logout(HttpSession session, HttpServletRequest request) {
+ 	 		//카카오계정과 함께 로그아웃
+ 	 		MemberVO login = (MemberVO)session.getAttribute("loginInfo");
+ 	 		String social = login.getSocial();
+ 	 		
+ 	 		//세션에 있는 로그인정보(회원정보)를 삭제한다
+ 	 		session.removeAttribute("loginInfo");
+ 	 		
+ 	 		if( social != null && social.equals("K") ) {
+ 	 			//"https://kauth.kakao.com/oauth/logout
+ 	 			//?client_id=${YOUR_REST_API_KEY}
+ 	 			//&logout_redirect_uri=${YOUR_LOGOUT_REDIRECT_URI}"
+ 	 			StringBuffer url = 
+ 	 				new StringBuffer("https://kauth.kakao.com/oauth/logout");
+ 	 			url.append("?client_id=").append(KAKAO_ID);
+ 	 			url.append("&logout_redirect_uri=").append( appName(request) );
+ 	 			return "redirect:" + url.toString();
+ 	 		}else
+ 	 			return "redirect:/";
+ 	 	}
  	//로그인처리 요청
 	@ResponseBody @RequestMapping("/smart_login")
 	public boolean login(String id, String pw, HttpSession session) {
-		//화면에서 입력한 아이디에 대한 salt 를 사용해서 
+		
+		//화면에서 입력한 아이디에 대한 salt를 사용해서
 		String salt = service.member_salt(id);
-		//입력한 비밀번호를 암호화하고, 
+		//입력한 비밀번호를 암호화하고,
 		pw = common.getEncrypt(pw, salt);
 		//화면에서 입력한 아이디/비번가 일치하는 회원정보를 DB에서 조회해와
 		MemberVO vo = service.member_login(id, pw);
@@ -300,65 +288,67 @@ public class MemberController {
 	@RequestMapping("/password")
 	public String password(HttpSession session) {
 		session.setAttribute("category", "password");
-		//로그인 된 경우 비밀번호 변경화면으로 연결
-		//로그인 안 된 경우 로그인 화면으로 연결
+		// 로그인 된 경우 비밀번호 변경화면으로 연결
+		// 로그인 안된 경우 로그인 화면으로 연결		
 		MemberVO vo = (MemberVO)session.getAttribute("loginInfo");
 		//응답화면연결
-		if( vo==null )
+		if(vo == null)
 			return "redirect:login";
 		else
-			return "member/password";
+			
+		return "member/password";
 	}
 	
 	
 	//비밀번호 변경처리 요청
 	@RequestMapping("/change")
 	public String change(HttpSession session, String pw) {
-		//로그인 사용자의 salt 를 사용해서 새로 입력한 비밀번호를 암호화한다
+		// 로그인 사용자의 salt를 사용해서 새로 입력한 비밀번호를 암호화한다
 		MemberVO vo = (MemberVO)session.getAttribute("loginInfo");
-		if( vo==null ) return "redirect:login";
-		
-		pw = common.getEncrypt( pw, vo.getSalt() ); //암호화된 새 비번
+		if(vo == null ) return "redirect:login";
+		pw = common.getEncrypt(pw, vo.getSalt());	//암호화된 새 비밀번호
 		vo.setPw(pw);
 		
-		//화면에서 입력한 비밀번호를 DB에 변경저장한 후
+		// 화면에서 입력한 비밀번호를 DB에 변경 저장한 후
 		service.member_salt_pw(vo);
-		
-		//세션의 로그인정보를 변경된 정보로 바꿔 담는다
+		//세션의 로그인정보를 변경된 정보로 바꿔 담는다.
 		session.setAttribute("loginInfo", vo);
 		
-		//응답화면 연결
+		
+		// 응답화면 연결
 		return "redirect:/";
 	}
 	
-	
-	//비밀번호 재발급(임시비번발급)처리 요청
+	//비밀번호재발급 (임시비번) 요청
 	@ResponseBody @RequestMapping(value="/reset"
-						, produces="text/html; charset=utf-8")
+									,produces="text/html; charset=utf-8")
 	public String reset(MemberVO vo) {
-		//해당 아이디에 대해 임시비밀번호를 만들어 이메일로 전송한다
-		String pw = UUID.randomUUID().toString(); //adflh4e9afa-lhalfa-afadfshgsha
-		pw = pw.substring( pw.lastIndexOf("-") + 1 ); //afadfshgsha
+		//해당 아이디에 대해 임시 비밀번호를 만들어 이메일로 전송한다.
+		String pw = UUID.randomUUID().toString(); //ex) sg8dxfg80hfvo9aizx0c
+		pw = pw.substring(pw.lastIndexOf("-") + 1 );	  // 더짧게
 		
-		//암호화에 사용할 salt생성
+		//암호화에 사용할 salt 생성
 		String salt = common.generateSalt();
-		vo.setPw( common.getEncrypt(pw, salt) ); //암호화된 비번 afjklhaflhlaurheogrbafdlaf
+		vo.setPw(common.getEncrypt(pw, salt)); //암호화된 비번
 		vo.setSalt(salt);
 		
-		//이메일로 비번전송했음을 화면에 띄운다
+		//이메일로 비번을 전송했음을 화면에 띄운다
 		StringBuffer email = new StringBuffer("<script>");
 		//임시 비번을 DB에 저장한 후
-		if( service.member_salt_pw(vo)==1 ) {
-			//이메일로 전송한다.
+		if(service.member_salt_pw(vo) == 1) {
+		//이메일로 전송한다
 			common.sendPassword(vo, pw);
-			email.append("alert('임시 비밀번호가 이메일로 발송되었습니다\\n이메일을 확인하세요'); ");
-			email.append("location='login'; ");
+			email.append("alert('임시 비밀번호가 이메일로 발송되었습니다\\n이메일을 확인하세요');");
+			email.append("locatio= 'login';");
 		}else {
-			email.append("alert('임시 비밀번호 발급 실패ㅠㅠ');");
+			email.append("alert('임시 비밀번호 발급 실패');");
 		}
 		email.append("</script>");
+		
 		return email.toString();
+		
 	}
+	
 	
 	//비밀번호찾기화면 요청
 	@RequestMapping("/find")
@@ -367,7 +357,6 @@ public class MemberController {
 		//응답화면 연결
 		return "default/member/find";
 	}
-	
 	
 	//로그인화면 요청
 	@RequestMapping("/login")

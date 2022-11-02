@@ -11,9 +11,9 @@ table td { text-align: left }
 #comment-regist, #comment-list { width:600px; margin: 0 auto; text-align: left }
 #comment-regist div { display: flex; justify-content: space-between;}
 #comment { height: 60px; margin-top: 5px; }
-#comment-list span { float: right;}
-.modify { display: none; width:calc(100% - 2px); height:50px; margin-top:3px; padding:0 }
-.view { margin-top:3px; }
+#comment-list span{ float: right;}
+.modify{display : none; width: calc(100% - 2px); margin-top: 3px; padding:0; height: 40px; }
+.view{ margin-top: 3px;}
 </style>
 </head>
 <body>
@@ -118,8 +118,8 @@ function comment_list(){
 	$.ajax({
 		url: 'board/comment/list/${vo.id}',
 		//data: { board_id:${vo.id} },
-		success: function( response ){
-			$('#comment-list').html( response );
+		success: function(response){
+			$('#comment-list').html(response);
 		},error: function(req, text){
 			alert(text+':'+req.status);
 		}

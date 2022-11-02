@@ -32,7 +32,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int member_update(MemberVO vo) {
-		return dao.member_update(vo);
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -48,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int member_salt_pw(MemberVO vo) {
+		
 		return dao.member_salt_pw(vo);
 	}
 

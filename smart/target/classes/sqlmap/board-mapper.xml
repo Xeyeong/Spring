@@ -3,15 +3,15 @@
 <mapper namespace="board">
 
 <!-- 방명록 댓글 삭제 -->
-<delete id='comment_delete'>
-delete from board_comment where id = #{id}
+<delete id="comment_delete">
+	delete from board_comment where id = #{id}
 </delete>
 
 
 <!-- 방명록 댓글 변경저장 -->
 <update id="comment_update">
-update board_comment set content = #{content}
-where id = #{id}
+	update board_comment set content = #{content}
+	where id = #{id}
 </update>
 
 <!-- 방명록 댓글 목록 조회 -->

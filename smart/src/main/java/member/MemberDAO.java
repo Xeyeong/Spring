@@ -16,7 +16,7 @@ public class MemberDAO implements MemberService {
 	public int member_join(MemberVO vo) {
 		return sql.insert("member.join", vo);
 	}
-
+	
 	@Override
 	public MemberVO member_myinfo(String id) {
 		// TODO Auto-generated method stub
@@ -49,6 +49,7 @@ public class MemberDAO implements MemberService {
 
 	@Override
 	public List<MemberVO> member_list() {
+	
 		return sql.selectList("member.list");
 	}
 
@@ -59,7 +60,7 @@ public class MemberDAO implements MemberService {
 
 	@Override
 	public String member_salt(String id) {
-		return sql.selectOne("member.salt", id);
+	return sql.selectOne("member.salt", id);
 	}
 
 	@Override
@@ -68,3 +69,10 @@ public class MemberDAO implements MemberService {
 	}
 
 }
+
+
+
+
+
+
+
